@@ -68,7 +68,7 @@ static void drawTask(void *arg)
 class MjpegClass
 {
 public:
-  bool setup(File input, uint8_t *mjpeg_buf, JPEG_DRAW_CALLBACK *pfnDraw)
+  bool setup(Stream *input, uint8_t *mjpeg_buf, JPEG_DRAW_CALLBACK *pfnDraw)
   {
     _input = input;
     _mjpeg_buf = mjpeg_buf;
@@ -90,26 +90,40 @@ public:
   {
     if (_inputindex == 0)
     {
-      _buf_read = _input.read(_read_buf, READ_BUFFER_SIZE);
+      _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
       _inputindex += _buf_read;
     }
     _mjpeg_buf_offset = 0;
-    int i = 3;
+    int i = 0;
+    bool found_FFD8 = false;
+    while ((i < _buf_read) && (!found_FFD8))
+    {
+        if ((_read_buf[i] == 0xFF) && (_read_buf[i + 1] == 0xD8)) // JPEG header
+        {
+          // Serial.printf("Found FFD8 at: %d.\n", i);
+          found_FFD8 = true;
+        }
+        ++i;
+    }
+    --i;
+    uint8_t *_p = _read_buf + i;
+    _buf_read -= i;
     bool found_FFD9 = false;
     if (_buf_read > 0)
     {
       i = 3;
       while ((_buf_read > 0) && (!found_FFD9))
       {
-        if ((_mjpeg_buf_offset > 0) && (_mjpeg_buf[_mjpeg_buf_offset - 1] == 0xFF) && (_read_buf[0] == 0xD9)) // JPEG trailer
+        if ((_mjpeg_buf_offset > 0) && (_mjpeg_buf[_mjpeg_buf_offset - 1] == 0xFF) && (_p[0] == 0xD9)) // JPEG trailer
         {
+          // Serial.printf("Found FFD9 at: %d.\n", i);
           found_FFD9 = true;
         }
         else
         {
           while ((i < _buf_read) && (!found_FFD9))
           {
-            if ((_read_buf[i] == 0xFF) && (_read_buf[i + 1] == 0xD9)) // JPEG trailer
+            if ((_p[i] == 0xFF) && (_p[i + 1] == 0xD9)) // JPEG trailer
             {
               found_FFD9 = true;
               ++i;
@@ -119,21 +133,23 @@ public:
         }
 
         // Serial.printf("i: %d\n", i);
-        memcpy(_mjpeg_buf + _mjpeg_buf_offset, _read_buf, i);
+        memcpy(_mjpeg_buf + _mjpeg_buf_offset, _p, i);
         _mjpeg_buf_offset += i;
         size_t o = _buf_read - i;
         if (o > 0)
         {
           // Serial.printf("o: %d\n", o);
-          memcpy(_read_buf, _read_buf + i, o);
-          _buf_read = _input.read(_read_buf + o, READ_BUFFER_SIZE - o);
+          memcpy(_read_buf, _p + i, o);
+          _buf_read = _input->readBytes(_read_buf + o, READ_BUFFER_SIZE - o);
+          _p = _read_buf;
           _inputindex += _buf_read;
           _buf_read += o;
           // Serial.printf("_buf_read: %d\n", _buf_read);
         }
         else
         {
-          _buf_read = _input.read(_read_buf, READ_BUFFER_SIZE);
+          _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
+          _p = _read_buf;
           _inputindex += _buf_read;
         }
         i = 0;
@@ -149,7 +165,6 @@ public:
 
   bool drawJpg()
   {
-    _fileindex = 0;
     _remain = _mjpeg_buf_offset;
 
     _jpeg.openRAM(_mjpeg_buf, _remain, queueDrawMCU);
@@ -166,7 +181,7 @@ public:
   }
 
 private:
-  File _input;
+  Stream *_input;
   uint8_t *_read_buf;
   uint8_t *_mjpeg_buf;
   int32_t _mjpeg_buf_offset = 0;
@@ -177,7 +192,6 @@ private:
   int32_t _inputindex = 0;
   int32_t _buf_read;
   int32_t _remain = 0;
-  uint32_t _fileindex;
 
   int32_t _tft_width;
   int32_t _tft_height;

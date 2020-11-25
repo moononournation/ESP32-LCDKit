@@ -102,7 +102,7 @@ void setup()
 
         start_ms = millis();
         curr_ms = millis();
-        mjpeg.setup(vFile, mjpeg_buf, drawMCU);
+        mjpeg.setup(&vFile, mjpeg_buf, drawMCU);
         mp3->begin(aFile, out);
         next_frame_ms = start_ms + (++next_frame * 1000 / FPS);
 
