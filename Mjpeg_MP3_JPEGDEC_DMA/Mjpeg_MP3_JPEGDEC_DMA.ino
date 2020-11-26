@@ -102,7 +102,7 @@ void setup()
 
         start_ms = millis();
         curr_ms = millis();
-        mjpeg.setup(&vFile, mjpeg_buf, drawMCU);
+        mjpeg.setup(&vFile, mjpeg_buf, drawMCU, true, true);
         mp3->begin(aFile, out);
         next_frame_ms = start_ms + (++next_frame * 1000 / FPS);
 
@@ -154,11 +154,11 @@ void setup()
         Serial.printf("Time used: %d ms\n", time_used);
         Serial.printf("Expected FPS: %d\n", FPS);
         Serial.printf("Actual FPS: %0.1f\n", fps);
-        Serial.printf("Play MP3: %d ms (%0.1f %%)\n", total_play_audio, 100.0 * total_play_audio / time_used);
-        Serial.printf("SDMMC read MJPEG: %d ms (%0.1f %%)\n", total_read_video, 100.0 * total_read_video / time_used);
-        Serial.printf("Decode video: %d ms (%0.1f %%)\n", total_decode_video, 100.0 * total_decode_video / time_used);
-        Serial.printf("Show video: %d ms (%0.1f %%)\n", total_show_video, 100.0 * total_show_video / time_used);
-        Serial.printf("Remain: %d ms (%0.1f %%)\n", total_remain, 100.0 * total_remain / time_used);
+        Serial.printf("Play MP3: %lu ms (%0.1f %%)\n", total_play_audio, 100.0 * total_play_audio / time_used);
+        Serial.printf("SDMMC read MJPEG: %lu ms (%0.1f %%)\n", total_read_video, 100.0 * total_read_video / time_used);
+        Serial.printf("Decode video: %lu ms (%0.1f %%)\n", total_decode_video, 100.0 * total_decode_video / time_used);
+        Serial.printf("Show video: %lu ms (%0.1f %%)\n", total_show_video, 100.0 * total_show_video / time_used);
+        Serial.printf("Remain: %lu ms (%0.1f %%)\n", total_remain, 100.0 * total_remain / time_used);
 
 #define CHART_MARGIN 24
 #define LEGEND_A_COLOR 0xE0C3
