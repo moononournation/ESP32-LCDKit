@@ -7,7 +7,7 @@
 /*******************************************************************************
  * Start of Arduino_GFX setting
  ******************************************************************************/
-#include "Arduino_GFX_Library.h"
+#include <Arduino_GFX_Library.h>
 
 #define TFT_BL 23
 #define TFT_CS 5

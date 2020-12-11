@@ -2,7 +2,7 @@
 #define _JPEGDEC_H_
 
 #include <FS.h>
-#include "Arduino_GFX_Library.h"
+#include <Arduino_GFX_Library.h>
 
 #include "lgfx_tjpgd.h"
 

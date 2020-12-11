@@ -14,8 +14,7 @@
 #include <SD_MMC.h>
 #include <driver/i2s.h>
 
-#include "Arduino_GFX_Library.h"
-
+#include <Arduino_GFX_Library.h>
 #define TFT_BRIGHTNESS 128
 #define TFT_BL 23
 Arduino_DataBus *bus = new Arduino_ESP32SPI(19 /* DC */, 5 /* CS */, 22 /* SCK */, 21 /* MOSI */, -1 /* MISO */, VSPI, true);

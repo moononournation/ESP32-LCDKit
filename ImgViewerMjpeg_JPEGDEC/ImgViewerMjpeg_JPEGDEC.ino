@@ -18,7 +18,7 @@
 #define MJPEG_BUFFER_SIZE (240 * 240 * 2 / 10)
 
 /* Arduino_GFX */
-#include "Arduino_GFX_Library.h"
+#include <Arduino_GFX_Library.h>
 #define TFT_BRIGHTNESS 128
 #define TFT_BL 23
 Arduino_DataBus *bus = new Arduino_ESP32SPI(19 /* DC */, 5 /* CS */, 22 /* SCK */, 21 /* MOSI */, -1 /* MISO */, VSPI);
