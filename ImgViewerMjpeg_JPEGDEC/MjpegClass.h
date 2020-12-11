@@ -70,7 +70,6 @@ public:
   bool setup(Stream *input, uint8_t *mjpeg_buf, JPEG_DRAW_CALLBACK *pfnDraw, bool enableMultiTask, bool useBigEndian)
   {
     _input = input;
-    _inputindex = 0;
     _mjpeg_buf = mjpeg_buf;
     _pfnDraw = pfnDraw;
     _enableMultiTask = enableMultiTask;
@@ -78,11 +77,12 @@ public:
 
     _read_buf = (uint8_t *)malloc(READ_BUFFER_SIZE);
 
-    if (_enableMultiTask && (!_task))
+    if (_enableMultiTask)
     {
+      TaskHandle_t task;
       _p.drawFunc = pfnDraw;
       xqh = xQueueCreate(NUMBER_OF_DRAW_BUFFER, sizeof(JPEGDRAW));
-      xTaskCreatePinnedToCore(drawTask, "drawTask", 1600, &_p, 1, &_task, 0);
+      xTaskCreatePinnedToCore(drawTask, "drawTask", 1600, &_p, 1, &task, 0);
     }
 
     return true;
@@ -222,7 +222,6 @@ private:
 
   JPEGDEC _jpeg;
   paramDrawTask _p;
-  TaskHandle_t _task;
 
   int32_t _inputindex = 0;
   int32_t _buf_read;

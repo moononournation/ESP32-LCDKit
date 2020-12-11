@@ -3,9 +3,12 @@
  * https://github.com/moononournation/Arduino_GFX.git
  * https://github.com/bitbank2/JPEGDEC.git
  */
-#define SSID_NAME "myssid"
-#define SSID_PASSWORD "mypassword"
-#define URL "http://192.168.2.1/jpg_stream"
+//#define SSID_NAME "myssid"
+//#define SSID_PASSWORD "mypassword"
+//#define URL "http://192.168.2.1/jpg_stream"
+#define SSID_NAME "fsbrowserplus"
+#define SSID_PASSWORD "PleaseInputYourPasswordHere"
+#define URL "http://fsbrowserplus.local/stream"
 #define MJPEG_BUFFER_SIZE (320 * 240 * 2 / 4)
 
 #include <WiFi.h>
@@ -68,6 +71,7 @@ void loop()
   if (WiFi.status() != WL_CONNECTED)
   {
     // wait for WiFi connection
+    Serial.println("Waiting for WiFi connection.");
     delay(500);
   }
   else
