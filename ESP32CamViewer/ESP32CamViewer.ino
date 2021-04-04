@@ -18,7 +18,7 @@
 #include <Arduino_GFX_Library.h>
 #define TFT_BRIGHTNESS 128
 #define TFT_BL 23
-static Arduino_DataBus *bus = new Arduino_ESP32SPI_DMA(19 /* DC */, 5 /* CS */, 22 /* SCK */, 21 /* MOSI */, -1 /* MISO */, VSPI, true);
+static Arduino_DataBus *bus = new Arduino_ESP32SPI(19 /* DC */, 5 /* CS */, 22 /* SCK */, 21 /* MOSI */, -1 /* MISO */, VSPI, true);
 static Arduino_ILI9341 *gfx = new Arduino_ILI9341(bus, 18 /* RST */, 1 /* rotation */);
 
 /* MJPEG Video */
@@ -32,7 +32,7 @@ static unsigned long timeUsedDecode = 0;
 static unsigned long timeUsedDrawMCU = 0;
 
 // pixel drawing callback
-static void drawMCU(JPEGDRAW *pDraw)
+static int drawMCU(JPEGDRAW *pDraw)
 {
   // Serial.printf("Draw pos = %d,%d. size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
   unsigned long startMs = millis();
@@ -41,6 +41,8 @@ static void drawMCU(JPEGDRAW *pDraw)
   gfx->writeBytes((uint8_t *)pDraw->pPixels, pDraw->iWidth * pDraw->iHeight * 2);
   gfx->endWrite();
   timeUsedDrawMCU += millis() - startMs;
+
+  return 1;
 } /* drawMCU() */
 
 void setup()

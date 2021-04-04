@@ -16,7 +16,7 @@
 #include <Arduino_GFX_Library.h>
 #define TFT_BRIGHTNESS 128
 #define TFT_BL 23
-static Arduino_DataBus *bus = new Arduino_ESP32SPI_DMA(19 /* DC */, 5 /* CS */, 22 /* SCK */, 21 /* MOSI */, -1 /* MISO */, VSPI, true);
+static Arduino_DataBus *bus = new Arduino_ESP32SPI(19 /* DC */, 5 /* CS */, 22 /* SCK */, 21 /* MOSI */, -1 /* MISO */, VSPI, true);
 static Arduino_ILI9341 *gfx = new Arduino_ILI9341(bus, 18 /* RST */, 1 /* rotation */);
 
 /* MP3 Audio */

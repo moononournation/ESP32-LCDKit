@@ -24,7 +24,7 @@ static JPEGDRAW jpegdraws[NUMBER_OF_DRAW_BUFFER];
 static int queue_cnt = 0;
 static int draw_cnt = 0;
 
-static void queueDrawMCU(JPEGDRAW *pDraw)
+static int queueDrawMCU(JPEGDRAW *pDraw)
 {
   ++queue_cnt;
   while ((queue_cnt - draw_cnt) > NUMBER_OF_DRAW_BUFFER)
@@ -62,6 +62,8 @@ static void drawTask(void *arg)
   vQueueDelete(xqh);
   Serial.println("drawTask end");
   vTaskDelete(NULL);
+
+  return 1;
 }
 
 class MjpegClass

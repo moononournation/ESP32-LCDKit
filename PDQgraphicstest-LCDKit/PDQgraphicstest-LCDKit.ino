@@ -28,7 +28,6 @@
 
 // ESP32 hardware SPI, more customizable parameters
  Arduino_DataBus *bus = new Arduino_ESP32SPI(TFT_DC, TFT_CS, TFT_SCLK, TFT_MOSI, TFT_MISO, VSPI, true);
-// Arduino_DataBus *bus = new Arduino_ESP32SPI_DMA(TFT_DC, TFT_CS, TFT_SCLK, TFT_MOSI, -1, VSPI, true);
 
 // ESP32 parallel 8-bit
 // Arduino_DataBus *bus = new Arduino_ESP32PAR8(TFT_DC, TFT_CS, 27 /* WR */, 13 /* RD */, 16 /* D0 */, 17 /* D1 */, 18 /* D2 */, 19 /* D3 */, 21 /* D4 */, 22 /* D5 */, 23 /* D6 */, 25 /* D7 */);
